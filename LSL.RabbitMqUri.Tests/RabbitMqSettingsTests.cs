@@ -108,6 +108,7 @@ namespace LSL.RabbitMqUri.Tests
 
             settings.ToUri(c => c.VirtualHost = "new-vhost").Should().Be(new Uri(expected));
             settings.ToString(c => c.VirtualHost = "new-vhost").Should().Be(expected);
+            settings.VirtualHost.Should().Be("my-host");
         }
     }    
 }
