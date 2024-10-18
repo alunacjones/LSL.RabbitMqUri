@@ -73,7 +73,7 @@ namespace LSL.RabbitMqUri.Tests
         [TestCase(
             "amqps://user:pass@host",
             "host",
-            5672,
+            5671,
             "",
             "user",
             "pass",
@@ -82,7 +82,7 @@ namespace LSL.RabbitMqUri.Tests
         [TestCase(
             "amqps://user:pass@host/vhost",
             "host",
-            5672,
+            5671,
             "vhost",
             "user",
             "pass",
@@ -91,7 +91,7 @@ namespace LSL.RabbitMqUri.Tests
         [TestCase(
             "amqps://host/vhost",
             "host",
-            5672,
+            5671,
             "vhost",
             "",
             "",
@@ -100,7 +100,7 @@ namespace LSL.RabbitMqUri.Tests
         [TestCase(
             "amqps://asd@host/vhost",
             "host",
-            5672,
+            5671,
             "vhost",
             "asd",
             "",
@@ -109,7 +109,7 @@ namespace LSL.RabbitMqUri.Tests
         [TestCase(
             "amqps://asd@host/vhost/other",
             "host",
-            5672,
+            5671,
             "vhost/other",
             "asd",
             "",

@@ -1,3 +1,5 @@
+using System;
+
 namespace LSL.RabbitMqUri
 {
     /// <summary>
@@ -40,5 +42,64 @@ namespace LSL.RabbitMqUri
         /// </summary>
         /// <value></value>
         public bool UseSsl { get; set; }
+
+        /// <summary>
+        /// Clones this instance
+        /// </summary>
+        /// <returns></returns>
+        public RabbitMqSettings Clone()
+        {
+            return new RabbitMqSettings
+            {
+                Host = Host,
+                Port = Port,
+                Username = Username,
+                Password = Password,
+                UseSsl = UseSsl,
+                VirtualHost = VirtualHost                
+            };
+        }
+
+        /// <summary>
+        /// Convert a <c>RabbitMqSettings</c> instance to a Uri
+        /// </summary>
+        /// <remarks>A clone of the original settings is created</remarks>
+        /// <param name="configurator">Optional configurator to setup the the cloned settings prior to converting to a <c>Uri</c></param>
+        /// <returns></returns>
+        public Uri ToUri(Action<RabbitMqSettings> configurator = null)
+        {
+            var newInstance = Clone();
+
+            configurator?.Invoke(newInstance);
+
+            var builder = new UriBuilder
+            {
+                Path = newInstance.VirtualHost,
+                Password = newInstance.Password,
+                UserName = newInstance.Username,
+                Port = newInstance.Port == 0 
+                    ? newInstance.UseSsl ? 5671 : 5672
+                    : newInstance.Port,
+                Scheme = newInstance.UseSsl ? "amqps" : "amqp",
+                Host = newInstance.Host
+            };
+
+            return builder.Uri;
+        }
+
+        /// <summary>
+        /// Converts a <c>RabbitMqSettings</c> instance to a string
+        /// </summary>
+        /// <remarks>A clone of the original settings is created</remarks>
+        /// <returns></returns>
+        public override string ToString() => ToUri().AbsoluteUri;
+
+        /// <summary>
+        /// Convert a <c>RabbitMqSettings</c> instance to a Uri
+        /// </summary>
+        /// <remarks>A clone of the original settings is created</remarks>
+        /// <param name="configurator">Configurator to setup the the cloned settings prior to converting to a <c>string</c></param>
+        /// <returns></returns>
+        public string ToString(Action<RabbitMqSettings> configurator) => ToUri(configurator).AbsoluteUri;
     }
 }

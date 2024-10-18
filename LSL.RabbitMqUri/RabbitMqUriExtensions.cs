@@ -25,15 +25,16 @@ namespace LSL.RabbitMqUri
             }
 
             var splitValues = value.UserInfo.Split(':');
+            var useSsl = value.Scheme.Equals("amqps", StringComparison.InvariantCultureIgnoreCase);
 
             return new RabbitMqSettings
             {
                 Host = value.Host,
-                Port = value.Port == -1 ? 5672 : value.Port,
+                Port = value.Port == -1 ? useSsl ? 5671 : 5672 : value.Port,
                 Password = splitValues.ElementAtOrDefault(1) ?? string.Empty,
                 Username = splitValues.ElementAtOrDefault(0) ?? string.Empty,
                 VirtualHost = value.LocalPath.TrimStart('/'),
-                UseSsl = value.Scheme.Equals("amqps", StringComparison.InvariantCultureIgnoreCase)
+                UseSsl = useSsl
             };
         }
 
